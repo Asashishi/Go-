@@ -26,6 +26,11 @@ func main() {
 
 	/*后端模板渲染数据
 	* Gin框架使用LoadHTMLGlob()或者LoadHTMLFiles()进行模板渲染
+	* 如:
+	*		Server.LoadHTMLGlob("templates/*")
+	*		Server.POST("/upload", func(ctl *gin.Context) {
+	*			ctl.HTML(http.StatusOK, "upload.html",nil)
+	*		})
 	 */
 
 	Server.GET("/hello", func(c *gin.Context) {
@@ -102,6 +107,23 @@ func main() {
 	* 	address := c.PostForm("address")
 	*  	c.JSON(200, gin.H{"username": username,"address": address})
 	* })
+	 */
+
+	/*解析文件
+	* c.FormFile("file") 解析单个文件
+	* c.MultipartForm() 解析多个文件
+	 */
+
+	/*重定向
+	* 方法一:
+	* 	Server.GET("/", func(c *gin.Context) {
+	*		c.Redirect(301,"URL")
+	*	})
+	* 方法二:
+	* 	Server.GET("/", func(c *gin.Context){
+	*   	c.Request.URL.Path = "URL"
+	* 		Server.HandleContext(c)
+	* 	})
 	 */
 
 	// 参数绑定
