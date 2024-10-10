@@ -126,6 +126,14 @@ func main() {
 	* 	})
 	 */
 
+	/*路由组
+	* userGroup := Server.Group("/user")
+	* {
+	* 	userGroup.GET("/index",func(c *gin.Context){...})
+	*   userGroup.GET("/...",func(c *gin.Context){...})
+	* }
+	* */
+
 	// 参数绑定
 	type User struct {
 		UserName string `form:"username" json:"username" binding:"required"`
