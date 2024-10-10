@@ -129,16 +129,42 @@ func main() {
 	/*路由组
 	* userGroup := Server.Group("/user")
 	* {
-	*   userGroup.GET("/index",func(c *gin.Context){...})
+	* 	userGroup.GET("/index",func(c *gin.Context){...})
 	*   userGroup.POST("/...",func(c *gin.Context){...})
 	*   // 路由组支持嵌套
-	*   subGroup := userGroup("/sub")
+	* 	subGroup := userGroup("/sub")
 	*   {
-	*	// 访问 user/sub/...
-	*	subGroup.PUT("/...",func(c *gin.Context){...})
-	*   }
+	*		// 访问 user/sub/...
+	*		subGroup.PUT("/...",func(c *gin.Context){...})
+	*	}
 	* }
 	* */
+
+	/*中间件
+	* 定义中间件 类似于Flask的before_request()
+	* func StatCost() gin.HandlerFunc{
+	*	return func(c *gin.Context){
+	*		start := time.Now()
+	*  		// 执行下一个处理函数
+	*       c.Next()
+	*       // c.Abort() 终止处理, 不执行以下部分
+	*		cost := time.Since(start)
+	* 		log.Println(cost)
+	* 	}
+	* Server.POST("/", StatCost(), func(c *gin.Context){...}
+	*
+	* 为全局路由注册中间件, 即所有路由默认使用该中间件
+	* Server.Use(StatCost)
+	*
+	* 为路由组注册中间件
+	* userGroup := Server.Group("/user",StatCost()) 或者 userGroup := userGroup := Server.Group("/user"){userGroup.Use(StatCost())}
+	* 注意 gin中间件中启用goroutine应当使用拷贝的上下文即c.Copy()而不是c *gin.Context
+	 */
+
+	/*gin.New()
+	* 不启用Logger()和Recovery()的情况下创建一个http路由服务器对象
+	* 等于去掉以上两个中间件的gin.Default()
+	 */
 
 	// 参数绑定
 	type User struct {
@@ -169,4 +195,42 @@ func main() {
 	if err != nil {
 		log.Panicln(err)
 	}
+
+	/*启用多个服务
+	* var (
+	* 	EG errgroup.Group
+	* )
+	* func Router0() http.Handler{
+	*	router := gin.Default
+	* 	router.GET("/", func(c *gin.Context){...})
+	* 	return router
+	* }
+	* func Router1() http.Handler{
+	*	router := gin.Default
+	* 	router.GET("/", func(c *gin.Context){...})
+	* 	return router
+	* }
+	* Server0 := &http.Server{
+	* 	Addr: ":8080",
+	*	Handler: Router0(),
+	*	ReadTimeout: 5 * time.Second,
+	*	WriteTimeout: 10 * time.Second
+	* }
+	* Server1 := &http.Server{
+	* 	Addr: ":8081",
+	*	Handler: Router1(),
+	*	ReadTimeout: 5 * time.Second,
+	*	WriteTimeout: 10 * time.Second
+	* }
+	* EG.Go(func() err{
+	* 	return server0.ListenAndServe（）
+	* })
+	* EG.Go(func() err{
+	* 	return server1.ListenAndServe（）
+	* })
+	* err := EG.Wait()
+	* if err != nil{
+	*	log.Fatal(err)
+	* }
+	 */
 }
