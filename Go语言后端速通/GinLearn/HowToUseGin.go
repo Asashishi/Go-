@@ -129,14 +129,6 @@ func main() {
 	/*路由组
 	* userGroup := Server.Group("/user")
 	* {
-	* 	userGroup.GET("/index",func(c *gin.Context){...})
-	*   userGroup.GET("/...",func(c *gin.Context){...})
-	* }
-	* */
-
-	/*路由组
-	* userGroup := Server.Group("/user")
-	* {
 	*   userGroup.GET("/index",func(c *gin.Context){...})
 	*   userGroup.POST("/...",func(c *gin.Context){...})
 	*   // 路由组支持嵌套
