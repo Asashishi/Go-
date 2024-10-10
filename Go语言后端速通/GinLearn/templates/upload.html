@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload</title>
+</head>
+<body>
+    <input id="files" type="file" multiple>
+    <button id="submit">Upload</button>
+    <script>
+        let files = document.getElementById("files")
+        let submit = document.getElementById("submit")
+        let formData = new FormData();
+
+        submit.onclick = function (){
+            // 获取所有选中的文件并将它们添加到FormData中
+            for (let i = 0; i < files.files.length; i++) {
+                formData.append('file', files.files[i]);
+            }
+            // 使用 fetch 方法上传文件
+            fetch('http://127.0.0.1/upload/fileHandler', {
+                method: 'POST',
+                body: formData,
+            })
+                // 解析服务器响应
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 200){
+                        // 上传成功处理
+                        alert('Success');
+                        console.log(data)
+                    }
+                    else {
+                        alert("Error")
+                        console.log(data)
+                    }
+                })
+                .catch(error => {
+                    // 上传失败处理
+                    alert("Error")
+                    console.log(error)
+                });
+        }
+    </script>
+</body>
+</html>
