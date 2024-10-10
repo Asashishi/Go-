@@ -117,11 +117,11 @@ func main() {
 	/*重定向
 	* 方法一:
 	* 	Server.GET("/", func(c *gin.Context) {
-	*		c.Redirect(301,"URL")
+	*		c.Redirect(301,"http://...")
 	*	})
 	* 方法二:
 	* 	Server.GET("/", func(c *gin.Context){
-	*   	c.Request.URL.Path = "URL"
+	*   	c.Request.URL.Path = "/"(本地路由)
 	* 		Server.HandleContext(c)
 	* 	})
 	 */
