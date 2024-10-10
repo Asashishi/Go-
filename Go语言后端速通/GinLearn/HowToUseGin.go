@@ -137,14 +137,14 @@ func main() {
 	/*路由组
 	* userGroup := Server.Group("/user")
 	* {
-	* 	userGroup.GET("/index",func(c *gin.Context){...})
+	*   userGroup.GET("/index",func(c *gin.Context){...})
 	*   userGroup.POST("/...",func(c *gin.Context){...})
 	*   // 路由组支持嵌套
-	* 	subGroup := userGroup("/sub")
+	*   subGroup := userGroup("/sub")
 	*   {
-	*		// 访问 user/sub/...
-	*		subGroup.PUT("/...",func(c *gin.Context){...})
-	*	}
+	*	// 访问 user/sub/...
+	*	subGroup.PUT("/...",func(c *gin.Context){...})
+	*   }
 	* }
 	* */
 
