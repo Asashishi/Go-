@@ -4,14 +4,31 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"time"
 )
+
+// Go语言中间件 类似于Flask的before_request
+func StatCost() gin.HandlerFunc {
+	// 记录请求耗时
+	return func(ctl *gin.Context) {
+		start := time.Now()
+		// 可以通过c.Set在请求上下文中设置值, 后续的处理函数能够取到该值
+		//ctl.Set("isLogin", true)
+		// Next()调用该请求的剩余处理程序
+		ctl.Next()
+		// c.Abort() 终止执行
+		cost := time.Since(start)
+		log.Println("cost:", cost)
+	}
+}
 
 func main() {
 	gin.ForceConsoleColor()
 	Server := gin.Default()
 	// 加载模板
 	Server.LoadHTMLGlob("templates/*")
-	Server.GET("/upload", func(ctl *gin.Context) {
+	// 调用中间件
+	Server.GET("/upload", StatCost(), func(ctl *gin.Context) {
 		ctl.HTML(200, "upload.html", nil)
 	})
 
